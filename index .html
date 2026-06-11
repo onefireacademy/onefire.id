@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ONEFIRE Academy</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#0a0a0a;display:flex;align-items:flex-start;justify-content:center;min-height:100vh;padding:20px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif}
+:root{--fire:#E8500A;--dark:#111111;--dark2:#1A1A1A;--dark3:#222222}
+.phone{background:#111;border-radius:32px;border:2px solid #2a2a2a;overflow:hidden;width:380px;min-height:700px}
+.topbar{background:#111;display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:0.5px solid #2a2a2a}
+.logo{display:flex;align-items:center;gap:8px}
+.logo-icon{width:32px;height:32px;background:#E8500A;border-radius:8px;display:flex;align-items:center;justify-content:center}
+.logo-text{font-size:12px;font-weight:600;color:#fff;letter-spacing:1px}
+.logo-sub{font-size:9px;color:#888;letter-spacing:2px}
+.nav-tabs{display:flex;background:#1A1A1A;border-bottom:0.5px solid #2a2a2a}
+.tab{flex:1;padding:10px 4px;text-align:center;font-size:11px;color:#666;cursor:pointer;border-bottom:2px solid transparent;transition:all .2s}
+.tab.active{color:#E8500A;border-bottom:2px solid #E8500A}
+.tab i{display:block;font-size:18px;margin-bottom:2px}
+.screen{display:none;background:#111}
+.screen.active{display:block}
+.hero-section{background:#1A1A1A;padding:16px;text-align:center;border-bottom:0.5px solid #2a2a2a}
+.player-avatar{width:84px;height:84px;border-radius:50%;background:#2a2a2a;border:2.5px solid #E8500A;display:flex;align-items:center;justify-content:center;margin:0 auto 10px;overflow:hidden;cursor:pointer;position:relative}
+.player-avatar img{width:100%;height:100%;object-fit:cover;display:none}
+.avatar-overlay{position:absolute;inset:0;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;opacity:0;transition:.2s}
+.player-avatar:hover .avatar-overlay{opacity:1}
+.fire-id{font-size:11px;color:#E8500A;font-weight:600;letter-spacing:1px;margin-bottom:4px}
+.player-name{font-size:20px;font-weight:600;color:#fff;margin-bottom:6px}
+.player-meta{display:flex;align-items:center;justify-content:center;gap:14px;font-size:12px;color:#888}
+.meta-item{display:flex;align-items:center;gap:4px}
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border-top:0.5px solid #2a2a2a;margin-top:12px}
+.stat-box{padding:10px 4px;text-align:center;border-right:0.5px solid #2a2a2a}
+.stat-box:last-child{border-right:none}
+.stat-num{font-size:17px;font-weight:600;color:#fff}
+.stat-lbl{font-size:10px;color:#666;margin-top:2px}
+.section-header{display:flex;align-items:center;justify-content:space-between;padding:14px 16px 8px}
+.section-title{font-size:14px;font-weight:600;color:#fff}
+.see-all{font-size:11px;color:#E8500A;cursor:pointer}
+.filter-row{display:flex;gap:6px;padding:0 16px 10px;overflow-x:auto;scrollbar-width:none}
+.filter-row::-webkit-scrollbar{display:none}
+.filter-chip{padding:5px 14px;border-radius:20px;font-size:11px;border:0.5px solid #333;color:#888;cursor:pointer;white-space:nowrap;background:#1A1A1A;transition:.2s}
+.filter-chip.active{background:#E8500A;color:#fff;border-color:#E8500A}
+.player-list{padding:0 16px}
+.player-row{display:flex;align-items:center;gap:10px;padding:11px 0;border-bottom:0.5px solid #222;cursor:pointer;transition:.15s}
+.player-row:hover{background:#1a1a1a;margin:0 -16px;padding:11px 16px}
+.player-row:last-child{border-bottom:none}
+.p-thumb{width:44px;height:44px;border-radius:10px;background:#2a2a2a;flex-shrink:0;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.p-thumb img{width:100%;height:100%;object-fit:cover}
+.p-info{flex:1}
+.p-id{font-size:10px;color:#E8500A;font-weight:600}
+.p-name{font-size:13px;font-weight:500;color:#fff}
+.p-pos{font-size:11px;color:#666;margin-top:1px}
+.media-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;padding:0 16px 16px}
+.media-item{aspect-ratio:1;background:#2a2a2a;border-radius:6px;overflow:hidden;position:relative;cursor:pointer}
+.media-item img{width:100%;height:100%;object-fit:cover}
+.media-add{aspect-ratio:1;border:1.5px dashed #333;border-radius:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;background:#1A1A1A;transition:.2s}
+.media-add:hover{border-color:#E8500A}
+.video-item{display:flex;gap:10px;padding:10px 16px;border-bottom:0.5px solid #222;align-items:center;cursor:pointer}
+.video-thumb{width:66px;height:44px;background:#2a2a2a;border-radius:8px;flex-shrink:0;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.video-thumb img{width:100%;height:100%;object-fit:cover}
+.play-icon{position:absolute;width:24px;height:24px;background:rgba(232,80,10,.9);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px}
+.video-info{flex:1}
+.video-title{font-size:12px;font-weight:500;color:#fff}
+.video-meta{font-size:10px;color:#666;margin-top:3px;display:flex;align-items:center;gap:8px}
+.video-duration{font-size:10px;color:#E8500A;background:#2a1a10;padding:2px 7px;border-radius:4px}
+.achievement-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;padding:0 16px 16px}
+.ach-card{background:#1A1A1A;border-radius:12px;padding:14px;text-align:center;border:0.5px solid #2a2a2a}
+.ach-icon{font-size:30px;margin-bottom:7px;color:#E8500A}
+.ach-title{font-size:12px;font-weight:500;color:#fff}
+.ach-sub{font-size:10px;color:#666;margin-top:3px}
+.id-card-wrap{background:#111;padding:16px}
+.id-card{background:#1A1A1A;border-radius:16px;border:0.5px solid #333;overflow:hidden}
+.id-card-top{background:#E8500A;padding:13px 16px;display:flex;align-items:center;gap:10px}
+.id-card-body{padding:16px;display:flex;gap:14px;align-items:center}
+.id-photo{width:72px;height:72px;border-radius:12px;background:#2a2a2a;flex-shrink:0;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative}
+.id-photo img{width:100%;height:100%;object-fit:cover;display:none;position:absolute;inset:0}
+.id-details{flex:1}
+.id-fire-num{font-size:22px;font-weight:700;color:#E8500A;letter-spacing:2px;font-family:monospace}
+.id-name{font-size:16px;font-weight:600;color:#fff;margin-bottom:6px}
+.id-row{display:flex;align-items:center;gap:6px;font-size:11px;color:#888;margin-bottom:4px}
+.id-row i{font-size:13px;color:#E8500A}
+.qr-section{padding:16px;text-align:center;border-top:0.5px solid #2a2a2a}
+.qr-box{width:110px;height:110px;background:#fff;border-radius:10px;margin:0 auto 10px;display:flex;align-items:center;justify-content:center;padding:7px}
+.qr-box svg{width:100%;height:100%}
+.qr-label{font-size:11px;color:#888;margin-bottom:12px}
+.share-btn{background:#E8500A;color:#fff;border:none;border-radius:10px;padding:11px;font-size:13px;font-weight:500;cursor:pointer;width:100%;display:flex;align-items:center;justify-content:center;gap:6px;margin-bottom:8px}
+.share-btn:hover{background:#c94008}
+.save-btn{background:transparent;color:#E8500A;border:0.5px solid #E8500A;border-radius:10px;padding:10px;font-size:12px;cursor:pointer;width:100%;display:flex;align-items:center;justify-content:center;gap:6px}
+.save-btn:hover{background:#2a1a10}
+.beneficiary-card{margin:0 16px 16px;background:#1A1A1A;border-radius:12px;border:0.5px solid #2a2a2a;padding:14px}
+.ben-title{font-size:12px;color:#E8500A;font-weight:600;margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.ben-row{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:0.5px solid #222;font-size:12px}
+.ben-row:last-child{border:none}
+.ben-key{color:#666}
+.ben-val{color:#fff;font-weight:500}
+.profile-tabs{display:flex;border-bottom:0.5px solid #2a2a2a}
+.ptab{flex:1;font-size:11px;padding:10px 4px;text-align:center;color:#666;border-bottom:2px solid transparent;cursor:pointer;transition:.2s}
+.ptab.active{color:#E8500A;border-bottom:2px solid #E8500A}
+.add-btn-label{background:#E8500A;color:#fff;border:none;border-radius:8px;padding:7px 14px;font-size:11px;cursor:pointer;display:flex;align-items:center;gap:4px}
+.empty-state{text-align:center;padding:32px 16px}
+input[type=file]{display:none}
+</style>
+</head>
+<body>
+<div class="phone">
+
+  <div class="topbar">
+    <div class="logo">
+      <div class="logo-icon"><i class="ti ti-flame" style="color:#fff;font-size:18px"></i></div>
+      <div>
+        <div class="logo-text">ONEFIRE</div>
+        <div class="logo-sub">ACADEMY</div>
+      </div>
+    </div>
+    <div style="display:flex;gap:14px;color:#888">
+      <i class="ti ti-bell" style="font-size:22px"></i>
+      <i class="ti ti-menu-2" style="font-size:22px"></i>
+    </div>
+  </div>
+
+  <div class="nav-tabs">
+    <div class="tab active" onclick="switchTab('home')"><i class="ti ti-home"></i>الرئيسية</div>
+    <div class="tab" onclick="switchTab('players')"><i class="ti ti-users"></i>اللاعبين</div>
+    <div class="tab" onclick="switchTab('profile')"><i class="ti ti-id-badge"></i>الملف</div>
+    <div class="tab" onclick="switchTab('id')"><i class="ti ti-qrcode"></i>Fire ID</div>
+  </div>
+
+  <!-- HOME -->
+  <div id="screen-home" class="screen active">
+    <div style="padding:20px 16px 16px;background:#1A1A1A;border-bottom:0.5px solid #2a2a2a">
+      <div style="font-size:24px;font-weight:700;color:#fff;line-height:1.3;margin-bottom:6px">كل لاعب قصة<br><span style="color:#E8500A">ونحن نوثّقها</span></div>
+      <div style="font-size:12px;color:#666;margin-bottom:14px">من أول يوم يبدأ رحلتهم نحو القمة، نحن هنا ندعمهم ونطوّرهم</div>
+      <button onclick="switchTab('players')" style="background:#E8500A;color:#fff;border:none;border-radius:10px;padding:10px 20px;font-size:13px;font-weight:500;cursor:pointer">استكشف اللاعبين</button>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px;padding:16px">
+      <div style="background:#1A1A1A;border-radius:12px;padding:16px;border:0.5px solid #2a2a2a;text-align:center">
+        <div style="font-size:26px;font-weight:700;color:#E8500A">70+</div>
+        <div style="font-size:11px;color:#888;margin-top:3px">لاعب مسجّل</div>
+      </div>
+      <div style="background:#1A1A1A;border-radius:12px;padding:16px;border:0.5px solid #2a2a2a;text-align:center">
+        <div style="font-size:26px;font-weight:700;color:#E8500A">12</div>
+        <div style="font-size:11px;color:#888;margin-top:3px">فئة عمرية</div>
+      </div>
+      <div style="background:#1A1A1A;border-radius:12px;padding:16px;border:0.5px solid #2a2a2a;text-align:center">
+        <div style="font-size:26px;font-weight:700;color:#E8500A">15+</div>
+        <div style="font-size:11px;color:#888;margin-top:3px">بطولة</div>
+      </div>
+      <div style="background:#1A1A1A;border-radius:12px;padding:16px;border:0.5px solid #2a2a2a;text-align:center">
+        <div style="font-size:26px;font-weight:700;color:#E8500A">100+</div>
+        <div style="font-size:11px;color:#888;margin-top:3px">إنجاز موثّق</div>
+      </div>
+    </div>
+    <div class="section-header"><span class="section-title">أحدث اللاعبين</span><span class="see-all" onclick="switchTab('players')">عرض الكل</span></div>
+    <div style="display:flex;gap:12px;padding:0 16px 20px;overflow-x:auto;scrollbar-width:none">
+      <div onclick="switchTab('profile')" style="flex-shrink:0;text-align:center;cursor:pointer">
+        <div style="width:58px;height:58px;border-radius:50%;background:#2a2a2a;border:2px solid #E8500A;display:flex;align-items:center;justify-content:center;color:#E8500A;margin:0 auto 5px"><i class="ti ti-user" style="font-size:24px"></i></div>
+        <div style="font-size:11px;color:#fff">يوسف</div>
+        <div style="font-size:10px;color:#E8500A">#OF023</div>
+      </div>
+      <div style="flex-shrink:0;text-align:center">
+        <div style="width:58px;height:58px;border-radius:50%;background:#2a2a2a;display:flex;align-items:center;justify-content:center;color:#444;margin:0 auto 5px"><i class="ti ti-user" style="font-size:24px"></i></div>
+        <div style="font-size:11px;color:#fff">سعود</div>
+        <div style="font-size:10px;color:#E8500A">#OF017</div>
+      </div>
+      <div style="flex-shrink:0;text-align:center">
+        <div style="width:58px;height:58px;border-radius:50%;background:#2a2a2a;display:flex;align-items:center;justify-content:center;color:#444;margin:0 auto 5px"><i class="ti ti-user" style="font-size:24px"></i></div>
+        <div style="font-size:11px;color:#fff">أحمد</div>
+        <div style="font-size:10px;color:#E8500A">#OF031</div>
+      </div>
+      <div style="flex-shrink:0;text-align:center">
+        <div style="width:58px;height:58px;border-radius:50%;background:#2a2a2a;display:flex;align-items:center;justify-content:center;color:#444;margin:0 auto 5px"><i class="ti ti-user" style="font-size:24px"></i></div>
+        <div style="font-size:11px;color:#fff">ريان</div>
+        <div style="font-size:10px;color:#E8500A">#OF052</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PLAYERS -->
+  <div id="screen-players" class="screen">
+    <div style="padding:12px 16px;background:#1A1A1A;border-bottom:0.5px solid #2a2a2a">
+      <div style="display:flex;align-items:center;gap:8px;background:#222;border-radius:10px;padding:9px 12px">
+        <i class="ti ti-search" style="color:#666;font-size:16px"></i>
+        <input id="searchInput" type="text" placeholder="ابحث عن لاعب..." oninput="filterPlayers()" style="background:transparent;border:none;outline:none;color:#fff;font-size:13px;flex:1;direction:rtl">
+      </div>
+    </div>
+    <div class="filter-row" id="filterRow">
+      <div class="filter-chip active" onclick="filterCat(this,'all')">الكل</div>
+      <div class="filter-chip" onclick="filterCat(this,'U18')">U18</div>
+      <div class="filter-chip" onclick="filterCat(this,'U16')">U16</div>
+      <div class="filter-chip" onclick="filterCat(this,'U14')">U14</div>
+      <div class="filter-chip" onclick="filterCat(this,'U12')">U12</div>
+      <div class="filter-chip" onclick="filterCat(this,'U10')">U10</div>
+    </div>
+    <div class="player-list" id="playerList">
+      <div class="player-row" onclick="switchTab('profile')" data-cat="U12">
+        <div class="p-thumb" style="border:1.5px solid #E8500A"><i class="ti ti-user" style="font-size:22px;color:#E8500A"></i></div>
+        <div class="p-info"><div class="p-id">#OF023</div><div class="p-name">يوسف العتيبي</div><div class="p-pos">مهاجم · تحت 13 سنة</div></div>
+        <i class="ti ti-chevron-left" style="color:#444"></i>
+      </div>
+      <div class="player-row" data-cat="U12">
+        <div class="p-thumb"><i class="ti ti-user" style="font-size:22px;color:#444"></i></div>
+        <div class="p-info"><div class="p-id">#OF017</div><div class="p-name">سعود محمد</div><div class="p-pos">مدافع · تحت 13 سنة</div></div>
+        <i class="ti ti-chevron-left" style="color:#444"></i>
+      </div>
+      <div class="player-row" data-cat="U14">
+        <div class="p-thumb"><i class="ti ti-user" style="font-size:22px;color:#444"></i></div>
+        <div class="p-info"><div class="p-id">#OF031</div><div class="p-name">أحمد ناصر</div><div class="p-pos">جناح · تحت 14 سنة</div></div>
+        <i class="ti ti-chevron-left" style="color:#444"></i>
+      </div>
+      <div class="player-row" data-cat="U16">
+        <div class="p-thumb"><i class="ti ti-user" style="font-size:22px;color:#444"></i></div>
+        <div class="p-info"><div class="p-id">#OF045</div><div class="p-name">عبدالله فيصل</div><div class="p-pos">حارس · تحت 16 سنة</div></div>
+        <i class="ti ti-chevron-left" style="color:#444"></i>
+      </div>
+      <div class="player-row" data-cat="U10">
+        <div class="p-thumb"><i class="ti ti-user" style="font-size:22px;color:#444"></i></div>
+        <div class="p-info"><div class="p-id">#OF052</div><div class="p-name">ريان خالد</div><div class="p-pos">وسط · تحت 12 سنة</div></div>
+        <i class="ti ti-chevron-left" style="color:#444"></i>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROFILE -->
+  <div id="screen-profile" class="screen">
+    <div class="hero-section">
+      <div class="player-avatar" onclick="document.getElementById('photoInput').click()">
+        <i class="ti ti-user" style="font-size:38px;color:#444" id="avatarIcon"></i>
+        <img id="avatarImg">
+        <div class="avatar-overlay"><i class="ti ti-camera" style="font-size:20px;color:#fff"></i></div>
+      </div>
+      <input type="file" id="photoInput" accept="image/*" onchange="loadAvatar(event)">
+      <div class="fire-id">#OF023</div>
+      <div class="player-name">يوسف العتيبي</div>
+      <div class="player-meta">
+        <div class="meta-item"><i class="ti ti-ball-football" style="font-size:13px"></i> مهاجم</div>
+        <div class="meta-item"><i class="ti ti-calendar" style="font-size:13px"></i> تحت 13 سنة</div>
+        <div class="meta-item"><i class="ti ti-calendar-event" style="font-size:13px"></i> يناير 2024</div>
+      </div>
+      <div class="stats-row">
+        <div class="stat-box"><div class="stat-num">23</div><div class="stat-lbl">مباراة</div></div>
+        <div class="stat-box"><div class="stat-num">11</div><div class="stat-lbl">هدف</div></div>
+        <div class="stat-box"><div class="stat-num">7</div><div class="stat-lbl">تمريرة</div></div>
+        <div class="stat-box"><div class="stat-num">4</div><div class="stat-lbl">بطولة</div></div>
+      </div>
+    </div>
+    <div class="profile-tabs">
+      <div id="ptab-gallery" class="ptab active" onclick="switchProfileTab('gallery')">الصور</div>
+      <div id="ptab-videos" class="ptab" onclick="switchProfileTab('videos')">الفيديوهات</div>
+      <div id="ptab-achieve" class="ptab" onclick="switchProfileTab('achieve')">الإنجازات</div>
+      <div id="ptab-info" class="ptab" onclick="switchProfileTab('info')">المعلومات</div>
+    </div>
+
+    <div id="psec-gallery">
+      <div style="padding:12px 16px 8px;display:flex;justify-content:space-between;align-items:center">
+        <span style="font-size:12px;color:#888" id="photoCount">0 صورة</span>
+        <label for="galleryInput" class="add-btn-label"><i class="ti ti-plus" style="font-size:15px"></i> إضافة صورة</label>
+      </div>
+      <input type="file" id="galleryInput" accept="image/*" multiple onchange="loadGallery(event)">
+      <div class="media-grid" id="galleryGrid">
+        <div class="media-add" onclick="document.getElementById('galleryInput').click()" style="height:100px">
+          <i class="ti ti-photo-plus" style="font-size:24px;color:#444"></i>
+          <span style="font-size:10px;color:#555;margin-top:5px">أضف صورة</span>
+        </div>
+      </div>
+    </div>
+
+    <div id="psec-videos" style="display:none">
+      <div style="padding:12px 16px 8px;display:flex;justify-content:space-between;align-items:center">
+        <span style="font-size:12px;color:#888" id="videoCount">0 فيديو</span>
+        <label for="videoInput" class="add-btn-label"><i class="ti ti-plus" style="font-size:15px"></i> إضافة فيديو</label>
+      </div>
+      <input type="file" id="videoInput" accept="video/*" multiple onchange="loadVideos(event)">
+      <div id="videoList">
+        <div class="empty-state">
+          <i class="ti ti-video-off" style="font-size:34px;color:#333"></i>
+          <p style="font-size:12px;color:#555;margin-top:10px">لا توجد فيديوهات بعد</p>
+        </div>
+      </div>
+    </div>
+
+    <div id="psec-achieve" style="display:none">
+      <div style="height:12px"></div>
+      <div class="achievement-grid">
+        <div class="ach-card"><i class="ti ti-trophy ach-icon"></i><div class="ach-title">لاعب الأسبوع</div><div class="ach-sub">موسم 2023-2024</div></div>
+        <div class="ach-card"><i class="ti ti-ball-football ach-icon"></i><div class="ach-title">أول هدف</div><div class="ach-sub">مارس 2024</div></div>
+        <div class="ach-card"><i class="ti ti-medal ach-icon"></i><div class="ach-title">بطل الأكاديمية</div><div class="ach-sub">رمضان 2024</div></div>
+        <div class="ach-card"><i class="ti ti-star ach-icon"></i><div class="ach-title">أفضل لاعب</div><div class="ach-sub">3 مرات</div></div>
+        <div class="ach-card"><i class="ti ti-users ach-icon"></i><div class="ach-title">قائد الفريق</div><div class="ach-sub">موسم 2023-2024</div></div>
+        <div class="ach-card"><i class="ti ti-flame ach-icon"></i><div class="ach-title">أكثر لاعب تطوراً</div><div class="ach-sub">موسم 2023-2024</div></div>
+      </div>
+    </div>
+
+    <div id="psec-info" style="display:none">
+      <div style="padding:14px 16px 4px;font-size:12px;color:#E8500A;font-weight:600">نبذة عن اللاعب</div>
+      <div style="padding:0 16px 14px;font-size:12px;color:#888;line-height:1.8">لاعب طموح يحب التحدي، يسعى دائماً لتطوير نفسه والوصول إلى أعلى المستويات.</div>
+      <div class="beneficiary-card">
+        <div class="ben-title"><i class="ti ti-users" style="font-size:14px"></i> بيانات المستفيد / ولي الأمر</div>
+        <div class="ben-row"><span class="ben-key">الاسم</span><span class="ben-val">فهد العتيبي</span></div>
+        <div class="ben-row"><span class="ben-key">صلة القرابة</span><span class="ben-val">الأب</span></div>
+        <div class="ben-row"><span class="ben-key">الجوال</span><span class="ben-val">+966 5x xxx xxxx</span></div>
+        <div class="ben-row"><span class="ben-key">الهوية</span><span class="ben-val">1xxxxxxxxx</span></div>
+        <div class="ben-row"><span class="ben-key">البريد</span><span class="ben-val">fahad@email.com</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FIRE ID -->
+  <div id="screen-id" class="screen">
+    <div class="id-card-wrap">
+      <div class="id-card">
+        <div class="id-card-top">
+          <div style="width:34px;height:34px;background:rgba(0,0,0,0.3);border-radius:8px;display:flex;align-items:center;justify-content:center">
+            <i class="ti ti-flame" style="color:#fff;font-size:20px"></i>
+          </div>
+          <div>
+            <div style="font-size:14px;font-weight:700;color:#fff">ONEFIRE ACADEMY</div>
+            <div style="font-size:10px;color:rgba(255,255,255,0.75)">بطاقة الهوية الرسمية</div>
+          </div>
+        </div>
+        <div class="id-card-body">
+          <div class="id-photo">
+            <i class="ti ti-user" style="font-size:32px;color:#444" id="idIcon"></i>
+            <img id="idImg">
+          </div>
+          <div class="id-details">
+            <div class="id-fire-num">#OF023</div>
+            <div class="id-name">يوسف العتيبي</div>
+            <div class="id-row"><i class="ti ti-ball-football"></i> مهاجم</div>
+            <div class="id-row"><i class="ti ti-calendar"></i> تحت 13 سنة</div>
+            <div class="id-row"><i class="ti ti-calendar-event"></i> انضم يناير 2024</div>
+          </div>
+        </div>
+        <div class="qr-section">
+          <div class="qr-box">
+            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+              <rect width="100" height="100" fill="white"/>
+              <rect x="5" y="5" width="35" height="35" fill="none" stroke="#111" stroke-width="4"/>
+              <rect x="12" y="12" width="21" height="21" fill="#111"/>
+              <rect x="60" y="5" width="35" height="35" fill="none" stroke="#111" stroke-width="4"/>
+              <rect x="67" y="12" width="21" height="21" fill="#111"/>
+              <rect x="5" y="60" width="35" height="35" fill="none" stroke="#111" stroke-width="4"/>
+              <rect x="12" y="67" width="21" height="21" fill="#111"/>
+              <rect x="60" y="50" width="8" height="8" fill="#111"/>
+              <rect x="72" y="50" width="8" height="8" fill="#111"/>
+              <rect x="84" y="50" width="8" height="8" fill="#111"/>
+              <rect x="60" y="62" width="8" height="8" fill="#111"/>
+              <rect x="76" y="62" width="16" height="8" fill="#111"/>
+              <rect x="60" y="74" width="16" height="8" fill="#111"/>
+              <rect x="80" y="74" width="12" height="8" fill="#111"/>
+              <rect x="60" y="86" width="8" height="8" fill="#111"/>
+              <rect x="72" y="86" width="20" height="8" fill="#111"/>
+              <rect x="50" y="60" width="6" height="6" fill="#111"/>
+              <rect x="50" y="74" width="6" height="6" fill="#111"/>
+              <rect x="50" y="88" width="6" height="6" fill="#111"/>
+              <rect x="46" y="50" width="6" height="36" fill="#111"/>
+            </svg>
+          </div>
+          <div class="qr-label">امسح الباركود للوصول إلى الملف الكامل ومتابعة رحلته وإنجازاته</div>
+          <button class="share-btn"><i class="ti ti-share"></i> مشاركة البطاقة</button>
+          <button class="save-btn"><i class="ti ti-download"></i> حفظ في المحفظة</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+function switchTab(name){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.nav-tabs .tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('screen-'+name).classList.add('active');
+  const tabs={home:0,players:1,profile:2,id:3};
+  document.querySelectorAll('.nav-tabs .tab')[tabs[name]].classList.add('active');
+}
+function switchProfileTab(name){
+  ['gallery','videos','achieve','info'].forEach(t=>{
+    const sec=document.getElementById('psec-'+t);
+    const tab=document.getElementById('ptab-'+t);
+    if(sec)sec.style.display=t===name?'block':'none';
+    if(tab){tab.classList.toggle('active',t===name);}
+  });
+}
+function loadAvatar(e){
+  const file=e.target.files[0]; if(!file)return;
+  const url=URL.createObjectURL(file);
+  const img=document.getElementById('avatarImg');
+  img.src=url; img.style.display='block';
+  document.getElementById('avatarIcon').style.display='none';
+  const idImg=document.getElementById('idImg');
+  idImg.src=url; idImg.style.display='block';
+  document.getElementById('idIcon').style.display='none';
+}
+function loadGallery(e){
+  const files=Array.from(e.target.files);
+  const grid=document.getElementById('galleryGrid');
+  const existing=grid.querySelectorAll('.media-item').length;
+  document.getElementById('photoCount').textContent=(existing+files.length)+' صورة';
+  files.forEach(file=>{
+    const url=URL.createObjectURL(file);
+    const item=document.createElement('div');
+    item.className='media-item'; item.style.height='100px';
+    const img=document.createElement('img');
+    img.src=url; img.style.cssText='width:100%;height:100%;object-fit:cover';
+    item.appendChild(img); grid.insertBefore(item,grid.firstChild);
+  });
+}
+function loadVideos(e){
+  const files=Array.from(e.target.files);
+  const list=document.getElementById('videoList');
+  const empty=list.querySelector('.empty-state');
+  if(empty)empty.remove();
+  document.getElementById('videoCount').textContent=list.querySelectorAll('.video-item').length+files.length+' فيديو';
+  files.forEach(file=>{
+    const item=document.createElement('div');
+    item.className='video-item';
+    item.innerHTML=`<div class="video-thumb"><div class="play-icon"><i class="ti ti-player-play" style="font-size:11px"></i></div></div><div class="video-info"><div class="video-title">${file.name.replace(/\.[^.]+$/,'')}</div><div class="video-meta"><span>ONEFIRE</span><span class="video-duration">فيديو</span></div></div>`;
+    list.appendChild(item);
+  });
+}
+function filterPlayers(){
+  const q=document.getElementById('searchInput').value.toLowerCase();
+  document.querySelectorAll('.player-row').forEach(row=>{
+    row.style.display=row.innerText.toLowerCase().includes(q)?'flex':'none';
+  });
+}
+let activeCat='all';
+function filterCat(el,cat){
+  activeCat=cat;
+  document.querySelectorAll('.filter-chip').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');
+  document.querySelectorAll('.player-row').forEach(row=>{
+    row.style.display=(cat==='all'||row.dataset.cat===cat)?'flex':'none';
+  });
+}
+</script>
+</body>
+</html>
